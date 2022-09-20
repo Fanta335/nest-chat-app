@@ -1,7 +1,7 @@
 FROM node:16.17.0-slim
 RUN npm i -g @nestjs/cli
 WORKDIR /api
-COPY package*.json .
+COPY package*.json /api/
 RUN npm install
-COPY . .
+COPY . ./
 CMD ["npm", "run", "build:start:prod"]
