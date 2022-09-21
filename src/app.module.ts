@@ -4,18 +4,21 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Cat } from './cats/cat.entity';
 import { CatsModule } from './cats/cats.module';
+import { getSecretsValuesFromAwsSecretManager } from './configurations';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       useFactory: async () => {
+        const { username, password, engine, host, port, dbname } =
+          await getSecretsValuesFromAwsSecretManager();
         return {
-          type: 'mysql',
-          host: 'localhost',
-          port: 3306,
-          username: 'root',
-          password: '',
-          database: 'test',
+          type: engine,
+          host: host,
+          port: port,
+          username: username,
+          password: password,
+          database: dbname,
           entities: [Cat],
           synchronize: true,
         };
